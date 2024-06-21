@@ -10,18 +10,25 @@ class ImageProcessor:
     def __init__(self):
         self.storeimages = StoreImage()
         self.inference = Inference()
+        self.score = 0.1
         thread = threading.Thread(target=self.get_infer_result)
         thread.start()
 
-    def read_images(self, path, camtype, fps):
-        filesList = os.listdir(path)
-        for file in filesList:
-            image = cv2.imread(path + file)
-            self.inference.inferImage(image, str(camtype) + str(file))
-            time.sleep(1 / int(fps))
-            print("Infering image:", file)
+    def read_images(self, path, fps, camtype="1"):
+        try:
+            filesList = os.listdir(path)
+            for file in filesList:
+                image = cv2.imread(path + file)
+                self.inference.inferImage(image, str(camtype) + str(file))
+                time.sleep(1 / int(fps))
+                print("Infering image:", file)
+            print("ALL IMAGES READ")
+            return True
+        except Exception as e:
+            print("Error in reading images:", e)
+            return False
 
-    def get_infer_result(self, path, camtype, fps):
+    def get_infer_result(self,path="/home/kniti/projects/knit-i/knitting-core/src/output"):
         while True:
             ret, data = self.inference.getInferResult()
             print(data)
@@ -44,7 +51,7 @@ class ImageProcessor:
                     print("Bounding Box:", xyxy[i])
                     print("Image Id:", imageId)
 
-                    if conf[i] > 0.1:
+                    if conf[i] > self.score:
                         os.makedirs("output", exist_ok=True)
                         os.makedirs("output/box/", exist_ok=True)
                         os.makedirs("output/unbox/", exist_ok=True)
