@@ -1,0 +1,40 @@
+import requests
+
+class DatabaseAPI:
+    def __init__(self, base_url):
+        self.base_url = base_url
+
+    def execute_query(self, query,function):
+        url = f"{self.base_url}/{function}"
+        payload = {"query": query}
+        response = requests.post(url, json=payload)
+        return response.json()
+
+    def insert(self, query):
+        return self.execute_query(query, "insert")
+
+    def insert_by_id(self, query):
+        return self.execute_query(query, "insertReturnId")
+    
+    def select(self, query):
+        return self.execute_query(query, "select")
+    
+    def update(self, query):
+        return self.execute_query(query, "update")
+    
+    def delete(self, query):
+        return self.execute_query(query, "delete")
+
+
+class ProcessDB:
+    def __init__(self):
+        self.db = DatabaseAPI("http://100.121.194.26:5431")
+
+    def fetch_mill_details(self):
+        query = "select * from mill_details"
+        rows =  self.db.select(query)
+        print(rows)
+        return rows
+
+# db = ProcessDB()
+# db.fetch_mill_details()
