@@ -35,6 +35,12 @@ class ProcessDB:
         rows =  self.db.select(query)
         print(rows)
         return rows
+    
+    def  fetch_machine_details(self):
+        query = "select * from machine_details"
+        rows = self.db.select(query)
+        print(rows)
+        return rows
 
 # db = ProcessDB()
 # db.fetch_mill_details()
