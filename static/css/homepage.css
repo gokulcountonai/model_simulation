@@ -76,7 +76,7 @@ label {
     font-weight: bold;
 }
 
-select, input[type="text"] {
+select, input[type="text"], input[type="file"] {
     padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -114,6 +114,7 @@ button[type="submit"]:hover {
 #Head-text {
     text-align: center;
     font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .selected-options {
