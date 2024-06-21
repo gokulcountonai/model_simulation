@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stimulation Software</title>
+    <script src="{{ url_for('static', filename='js/homepage.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#"><img src="/static/images/logo.png" alt="Logo"></a></li>
+                <li><a href="#">Stimulation</a></li>
+            </ul>
+        </nav>
+        <div class="elements">
+            <h2 id="Head-text">Stimulation Details</h2>
+            <form>
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="mill">Mill Name:</label>
+                        <select id="mill" name="mill">
+                            <option value="" disabled selected>Select mill</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label for="machine">Machine Name:</label>
+                        <select id="machine" name="machine">
+                            <option value="" disabled selected>Select machine</option>
+                        </select>
+                    </div>
+                </div>
+                <label for="typeval">Type of validation:</label>
+                <select id="typeval" name="typeval" multiple>
+                    <option value="gt">GT</option>
+                    <option value="mix">Mix</option>
+                    <option value="fpt">FPT</option>
+                </select>
+                <div id="selectedOptions" class="selected-options"></div>
+                <label for="folderPath">Folder Path:</label>
+                <input type="text" id="folderPath" name="folderPath" placeholder="Enter folder path">
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="comments">Score:</label>
+                        <input type="text" id="comments" name="comments" placeholder="Enter conference">
+                    </div>
+                    <div class="form-item">
+                        <label for="fps">FPS:</label>
+                        <input type="text" id="fps" name="fps" placeholder="Enter FPS">
+                    </div>
+                    <div class="form-item">
+                        <label for="report">Report:</label>
+                        <select id="report" name="report">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
