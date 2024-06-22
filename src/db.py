@@ -1,3 +1,4 @@
+import datetime
 import requests
 
 class DatabaseAPI:
@@ -47,10 +48,22 @@ class ProcessDB:
         return rows
     
 
-    
     def insert_validation_log(self, data):
         query = f"""
-        INSERT INTO validation_log (mill_name, machine_name, tp, fp, fda, score, fps, report_availability) 
-        VALUES ('{data['mill']}', '{data['machine']}', {data['tp']}, {data['fp']}, {data['fda']}, {data['score']}, {data['fps']}, {data['report_availability']})
+        INSERT INTO public.validation_log(validation_id, mill_name, machine_name, simulation_type, score, fps, report_availability, folder_path, "timestamp")
+        VALUES ('{data['mill']}', '{data['machine']}', {data['simulation_type']}, {data['score']}, {data['fps']}, {data['report_availability']}, {data['folderpath']}, {datetime.datetime.now()})
         """
         return self.db.insert(query)
+
+
+    def fetch_machine_details_by_mill_name(self, mill_name):
+        # Fetch mill_id for the given mill_name
+            mill_id_query = f"select machine_name from machine_details where mill_id = '{mill_name}'"    
+            mill_id_result = self.db.select(mill_id_query)
+            # print(mill_id_result)
+            # Fetch machine details for the fetched mill_id
+            machine_details_query = f"select machine_name from machine_details where mill_id = {mill_name}"
+            machine_details_result = self.db.select(machine_details_query)
+            machine_names = [row['machine_name'] for row in machine_details_result]
+            print(machine_names)
+            return machine_names

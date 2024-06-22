@@ -29,27 +29,25 @@ $(document).ready(function() {
         }
     });
 
-    // $('#stimulationForm').on('submit', function(event) {
-    //     event.preventDefault();
-    
-    //     const formData = new FormData(this);
-    //     const formDataObj = {};
-    //     formData.forEach((value, key) => { formDataObj[key] = value; });
-    
-    //     $.ajax({
-    //         url: '/submit',
-    //         method: 'POST',
-    //         contentType: 'application/json', // Indicate JSON payload
-    //         processData: false, // Don't process the data
-    //         data: JSON.stringify(formDataObj), // Convert to JSON
-    //         success: function(data) {
-    //             console.log('Success:', data);
-    //             alert(JSON.stringify(data, null, 2)); // Display response data in an alert
-    //         },
-    //         error: function(error) {
-    //             console.error('Error:', error);
-    //             alert('Error occurred. Please try again.');
-    //         }
-    //     });
-    // });
+// Event listener for mill selection change
+$('#mill').change(function() {
+    const selectedMillId = $(this).val(); // Get selected mill ID
+    $.ajax({
+        url: `/machines_by_mill/${selectedMillId}`, // Assuming this endpoint exists
+        method: 'GET',
+        success: function(data) {
+            const machineSelect = $('#machine');
+            machineSelect.html('<option value="" disabled selected>Select machine</option>'); // Clear and add placeholder
+            data.forEach(function(machineName) {
+                // Assuming machineName is a string like 'hisar 1', 'hisar 2'
+                machineSelect.append(`<option value="${machineName}">${machineName}</option>`);
+            });
+        },
+        error: function(error) {
+            console.error('Error fetching machines for selected mill:', error);
+        }
+    });
 });
+});
+
+

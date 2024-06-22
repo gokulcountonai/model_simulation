@@ -1,3 +1,4 @@
 env/*
 *reg*
 *tmp*
+*__pycache__*

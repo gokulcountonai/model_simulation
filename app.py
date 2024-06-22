@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from src.db import ProcessDB
 from main import ImageProcessor
+import os
+import os
 
 db = ProcessDB()
 image_processor = ImageProcessor()
@@ -12,12 +14,7 @@ def run_validation(path,fps,score):
     image_processor.score = score
     return image_processor.read_images(path,fps)
 
-
 def preprocess_data(data):
-    # Convert all keys to lowercase
-    
-    
-    # Process each key individually
     for key in ['tp', 'fp', 'fda', 'report_availability']:
         if data.get(key) in [None, '', 'no']:
             data[key] = 2
@@ -30,15 +27,24 @@ def preprocess_data(data):
 def index():
     return render_template('homepage.html')
 
-@app.route('/machines', methods=['GET'])
-def get_machine_details():
-    mill_name = "BEST COLOR"
-    print("MIl  name",mill_name)
-    mill_data = db.fetch_mill_details_by_millname(mill_name)
-    print(mill_data)
-    print(type(mill_data))
-    machine_details = db.fetch_machine_details(str(mill_data['mill_id']))
-    return jsonify(machine_details)
+# @app.route('/machines', methods=['GET'])
+# def get_machine_details():
+#     mill_name = "BEST COLOR"
+#     print("MIl  name",mill_name)
+#     mill_data = db.fetch_mill_details_by_millname(mill_name)
+#     print(mill_data)
+#     print(type(mill_data))
+#     machine_details = db.fetch_machine_details(str(mill_data['mill_id']))
+#     return jsonify(machine_details)
+
+
+@app.route('/machines_by_mill/<mill_name>', methods=['GET'])
+def get_machines_by_mill(mill_name):
+    if mill_name:
+        # print(mill_name)
+        machine_details = db.fetch_machine_details_by_mill_name(mill_name)
+        return jsonify(machine_details)
+    return jsonify([])
 
 @app.route('/mills', methods=['GET'])
 def get_mill_details():
@@ -58,7 +64,6 @@ def handle_form_submission():
     fps = request.form.get('fps')
     report = request.form.get('report')
     
-    # Process the data (example: save to database, perform calculations, etc.)
     # For now, just print it
     data = {
         "mill": mill_name,
@@ -71,16 +76,22 @@ def handle_form_submission():
         "folderpath": folder_path
     }
     # print(data)
-    # processed_data = preprocess_data(data)
     print(data)
     path = data['fileUpload']
     fps = data['fps']
     score = data['score']
     db.insert_validation_log(data)
-    run_validation(path,fps,score)
     # Assuming file needs to be saved
     if file_upload:
-        filename = file_upload.filename
+        filename = "reg"
+
+        # Delete all files in the directory
+        file_list = os.listdir("./uploads")
+        for file_name in file_list:
+            file_path = os.path.join("./uploads", file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
         file_upload.save(f"./uploads/{filename}")
         print(f"File {filename} uploaded successfully.")
     
@@ -89,4 +100,4 @@ def handle_form_submission():
     
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5021)
+    app.run(host='0.0.0.0', port=50211)
