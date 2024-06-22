@@ -35,11 +35,18 @@ class ProcessDB:
         # print(rows)
         return rows
     
-    def fetch_machine_details(self):
-        query = "select * from machine_details"
+    def fetch_mill_details_by_millname(self,mill_name):
+        query = f"select * from mill_details where mill_name = '{mill_name}'"
         rows = self.db.select(query)
         # print(rows)
+        return rows[0]
+    
+    def fetch_machine_details(self,data):
+        query = "select * from machine_details where mill_id = " + data
+        rows = self.db.select(query)
         return rows
+    
+
     
     def insert_validation_log(self, data):
         query = f"""

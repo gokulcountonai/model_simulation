@@ -32,7 +32,12 @@ def index():
 
 @app.route('/machines', methods=['GET'])
 def get_machine_details():
-    machine_details = db.fetch_machine_details()
+    mill_name = "BEST COLOR"
+    print("MIl  name",mill_name)
+    mill_data = db.fetch_mill_details_by_millname(mill_name)
+    print(mill_data)
+    print(type(mill_data))
+    machine_details = db.fetch_machine_details(str(mill_data['mill_id']))
     return jsonify(machine_details)
 
 @app.route('/mills', methods=['GET'])
@@ -46,9 +51,8 @@ def handle_form_submission():
     # Fetch form data
     mill_name = request.form.get('mill')
     machine_name = request.form.get('machine')
-    fp = request.form.get('fp')
-    tp = request.form.get('tp')
-    fda = request.form.get('fda')
+    simulation_type = request.form.get('validationType')
+    folder_path = request.form.get('folderpath')
     file_upload = request.files['fileUpload']
     score = request.form.get('score')
     fps = request.form.get('fps')
@@ -59,20 +63,21 @@ def handle_form_submission():
     data = {
         "mill": mill_name,
         "machine": machine_name,
-        "fp": fp,
-        "tp": tp,
-        "fda": fda,
+        "simulation_type": simulation_type,
         "score": score,
         "fps": fps,
         "report_availability": report,
-        "fileUpload": file_upload
+        "fileUpload": file_upload,
+        "folderpath": folder_path
     }
+    # print(data)
+    # processed_data = preprocess_data(data)
     print(data)
-    processed_data = preprocess_data(data)
     path = data['fileUpload']
     fps = data['fps']
     score = data['score']
-    db.insert_validation_log(processed_data)
+    db.insert_validation_log(data)
+    run_validation(path,fps,score)
     # Assuming file needs to be saved
     if file_upload:
         filename = file_upload.filename
@@ -81,23 +86,7 @@ def handle_form_submission():
     
     # Return a response
     return jsonify({"status": "success", "message": "Data inserted successfully"})
-
-
-# @app.route('/submit', methods=['POST'])
-# def submit_data():
-#     data = request.json
-#     print(data)
-#     processed_data = preprocess_data(data)
-#     path = data['fileUpload']
-#     fps = data['fps']
-#     score = data['score']
-#     db.insert_validation_log(processed_data)
-#     if run_validation(path, fps,score):
-#         print(preprocess_data)
-#         return jsonify({"status": "success", "message": "Data inserted successfully"})
-#     else:
-#         return jsonify({"status": "error", "message": "Error inserting data"})
     
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5021)
