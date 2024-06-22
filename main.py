@@ -31,7 +31,7 @@ class ImageProcessor:
     def get_infer_result(self,path="/home/kniti/projects/knit-i/knitting-core/src/output"):
         while True:
             ret, data = self.inference.getInferResult()
-            print(data)
+            # print(data)
             if ret != False:
                 if data["classType"] == "None":
                     continue

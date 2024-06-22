@@ -4,7 +4,7 @@ class DatabaseAPI:
     def __init__(self, base_url):
         self.base_url = base_url
 
-    def execute_query(self, query,function):
+    def execute_query(self, query, function):
         url = f"{self.base_url}/{function}"
         payload = {"query": query}
         response = requests.post(url, json=payload)
@@ -25,22 +25,25 @@ class DatabaseAPI:
     def delete(self, query):
         return self.execute_query(query, "delete")
 
-
 class ProcessDB:
     def __init__(self):
         self.db = DatabaseAPI("http://100.121.194.26:5431")
 
     def fetch_mill_details(self):
         query = "select * from mill_details"
-        rows =  self.db.select(query)
+        rows = self.db.select(query)
         print(rows)
         return rows
     
-    def  fetch_machine_details(self):
+    def fetch_machine_details(self):
         query = "select * from machine_details"
         rows = self.db.select(query)
         print(rows)
         return rows
-
-# db = ProcessDB()
-# db.fetch_mill_details()
+    
+    def insert_validation_log(self, data):
+        query = f"""
+        INSERT INTO validation_log (mill_name, machine_name, tp, fp, fda, score, fps, report_availability) 
+        VALUES ('{data['mill']}', '{data['machine']}', {data['tp']}, {data['fp']}, {data['fda']}, {data['score']}, {data['fps']}, {data['report_availability']})
+        """
+        return self.db.insert(query)
