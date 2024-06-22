@@ -29,25 +29,27 @@ $(document).ready(function() {
         }
     });
 
-    $('#stimulationForm').on('submit', function(event) {
-        event.preventDefault();
-
-        const formData = new FormData(this);
-
-        $.ajax({
-            url: '/submit',
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                console.log('Success:', data);
-                alert(JSON.stringify(data, null, 2)); // Display response data in an alert
-            },
-            error: function(error) {
-                console.error('Error:', error);
-                alert('Error occurred. Please try again.');
-            }
-        });
-    });
+    // $('#stimulationForm').on('submit', function(event) {
+    //     event.preventDefault();
+    
+    //     const formData = new FormData(this);
+    //     const formDataObj = {};
+    //     formData.forEach((value, key) => { formDataObj[key] = value; });
+    
+    //     $.ajax({
+    //         url: '/submit',
+    //         method: 'POST',
+    //         contentType: 'application/json', // Indicate JSON payload
+    //         processData: false, // Don't process the data
+    //         data: JSON.stringify(formDataObj), // Convert to JSON
+    //         success: function(data) {
+    //             console.log('Success:', data);
+    //             alert(JSON.stringify(data, null, 2)); // Display response data in an alert
+    //         },
+    //         error: function(error) {
+    //             console.error('Error:', error);
+    //             alert('Error occurred. Please try again.');
+    //         }
+    //     });
+    // });
 });

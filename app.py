@@ -40,20 +40,48 @@ def get_mill_details():
     mill_details = db.fetch_mill_details()
     return jsonify(mill_details)
 
-@app.route('/submit', methods=['POST'])
-def submit_data():
-    data = request.json
-    print(data)
-    processed_data = preprocess_data(data)
-    path = data['file']
-    fps = data['fps']
-    score = data['score']
-    db.insert_validation_log(processed_data)
-    if run_validation(path, fps,score):
-        print(preprocess_data)
-        return jsonify({"status": "success", "message": "Data inserted successfully"})
-    else:
-        return jsonify({"status": "error", "message": "Error inserting data"})
+
+@app.route('/submit-form', methods=['POST'])
+def handle_form_submission():
+    # Fetch form data
+    mill_name = request.form.get('mill')
+    machine_name = request.form.get('machine')
+    fp = request.form.get('fp')
+    tp = request.form.get('tp')
+    fda = request.form.get('fda')
+    file_upload = request.files['fileUpload']
+    score = request.form.get('score')
+    fps = request.form.get('fps')
+    report = request.form.get('report')
+    
+    # Process the data (example: save to database, perform calculations, etc.)
+    # For now, just print it
+    print(f"Mill Name: {mill_name}, Machine Name: {machine_name}, FP: {fp}, TP: {tp}, FDA: {fda}, Score: {score}, FPS: {fps}, Report: {report}")
+    
+    # Assuming file needs to be saved
+    if file_upload:
+        filename = file_upload.filename
+        file_upload.save(f"./uploads/{filename}")
+        print(f"File {filename} uploaded successfully.")
+    
+    # Return a response
+    return jsonify({"message": "Form data received successfully!"})
+
+
+# @app.route('/submit', methods=['POST'])
+# def submit_data():
+#     data = request.json
+#     print(data)
+#     processed_data = preprocess_data(data)
+#     path = data['fileUpload']
+#     fps = data['fps']
+#     score = data['score']
+#     db.insert_validation_log(processed_data)
+#     if run_validation(path, fps,score):
+#         print(preprocess_data)
+#         return jsonify({"status": "success", "message": "Data inserted successfully"})
+#     else:
+#         return jsonify({"status": "error", "message": "Error inserting data"})
     
 
 if __name__ == '__main__':
