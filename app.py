@@ -105,6 +105,12 @@ def handle_form_submission():
 
         file_upload.save(f"./uploads/{filename}")
         print(f"File {filename} uploaded successfully.")
+
+        with open(file_path, 'w') as f:
+            f.write("0")
+
+        # Run validation
+        run_validation(folder_path, fps, score)
     
     # Return a response
     return render_template('homepage.html')
