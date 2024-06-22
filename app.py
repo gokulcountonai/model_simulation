@@ -56,8 +56,23 @@ def handle_form_submission():
     
     # Process the data (example: save to database, perform calculations, etc.)
     # For now, just print it
-    print(f"Mill Name: {mill_name}, Machine Name: {machine_name}, FP: {fp}, TP: {tp}, FDA: {fda}, Score: {score}, FPS: {fps}, Report: {report}")
-    
+    data = {
+        "mill": mill_name,
+        "machine": machine_name,
+        "fp": fp,
+        "tp": tp,
+        "fda": fda,
+        "score": score,
+        "fps": fps,
+        "report_availability": report,
+        "fileUpload": file_upload
+    }
+    print(data)
+    processed_data = preprocess_data(data)
+    path = data['fileUpload']
+    fps = data['fps']
+    score = data['score']
+    db.insert_validation_log(processed_data)
     # Assuming file needs to be saved
     if file_upload:
         filename = file_upload.filename
@@ -65,7 +80,7 @@ def handle_form_submission():
         print(f"File {filename} uploaded successfully.")
     
     # Return a response
-    return jsonify({"message": "Form data received successfully!"})
+    return jsonify({"status": "success", "message": "Data inserted successfully"})
 
 
 # @app.route('/submit', methods=['POST'])
