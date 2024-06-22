@@ -45,7 +45,7 @@ def submit_data():
     data = request.json
     print(data)
     processed_data = preprocess_data(data)
-    path = data['fileUpload']
+    path = data['file']
     fps = data['fps']
     score = data['score']
     db.insert_validation_log(processed_data)

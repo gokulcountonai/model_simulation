@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // Fetch machine details and populate the select element
     $.ajax({
         url: '/machines',
         method: 'GET',
@@ -15,7 +14,6 @@ $(document).ready(function() {
         }
     });
 
-    // Fetch mill details and populate the select element
     $.ajax({
         url: '/mills',
         method: 'GET',
@@ -31,40 +29,20 @@ $(document).ready(function() {
         }
     });
 
-    // Event listener for form submission
     $('#stimulationForm').on('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
-        const formData = {};
-        $(this).find('input, select').each(function() {
-            formData[this.name] = $(this).val();
-        });
+        const formData = new FormData(this);
 
-        // Send formData to Flask backend using AJAX
         $.ajax({
             url: '/submit',
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
+            data: formData,
+            contentType: false,
+            processData: false,
             success: function(data) {
                 console.log('Success:', data);
                 alert(JSON.stringify(data, null, 2)); // Display response data in an alert
-                
-                // Now insert the processed data into the database
-                $.ajax({
-                    url: '/insert_validation_log',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data.data), // Sending the processed data
-                    success: function(insertData) {
-                        console.log('Insertion Success:', insertData);
-                        alert('Data inserted successfully');
-                    },
-                    error: function(error) {
-                        console.error('Insertion Error:', error);
-                        alert('Error occurred during insertion. Please try again.');
-                    }
-                });
             },
             error: function(error) {
                 console.error('Error:', error);
@@ -73,4 +51,3 @@ $(document).ready(function() {
         });
     });
 });
-
