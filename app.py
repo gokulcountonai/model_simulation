@@ -45,20 +45,16 @@ def submit_data():
     data = request.json
     print(data)
     processed_data = preprocess_data(data)
-    path = data['path']
+    path = data['fileUpload']
     fps = data['fps']
-    run_validation(path, fps)
-    print(preprocess_data)
+    score = data['score']
+    db.insert_validation_log(processed_data)
+    if run_validation(path, fps,score):
+        print(preprocess_data)
+        return jsonify({"status": "success", "message": "Data inserted successfully"})
+    else:
+        return jsonify({"status": "error", "message": "Error inserting data"})
     
-    return jsonify({"status": "success", "data": processed_data})
-
-@app.route('/insert_validation_log', methods=['POST'])
-def insert_validation_log():
-    data = request.json
-    print(data)
-    db.insert_validation_log(data)
-    
-    return jsonify({"status": "success", "message": "Data inserted successfully"})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

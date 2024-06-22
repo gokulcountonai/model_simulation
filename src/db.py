@@ -32,13 +32,13 @@ class ProcessDB:
     def fetch_mill_details(self):
         query = "select * from mill_details"
         rows = self.db.select(query)
-        print(rows)
+        # print(rows)
         return rows
     
     def fetch_machine_details(self):
         query = "select * from machine_details"
         rows = self.db.select(query)
-        print(rows)
+        # print(rows)
         return rows
     
     def insert_validation_log(self, data):
