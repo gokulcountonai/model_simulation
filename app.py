@@ -54,7 +54,7 @@ def get_mill_details():
 
 @app.route('/submit-form', methods=['POST'])
 def handle_form_submission():
-    # Fetch form data
+    # Extract form data
     mill_name = request.form.get('mill')
     machine_name = request.form.get('machine')
     simulation_type = request.form.get('validationType')
@@ -63,8 +63,22 @@ def handle_form_submission():
     score = request.form.get('score')
     fps = request.form.get('fps')
     report = request.form.get('report')
-    
-    # For now, just print it
+
+    # Validate score and fps ranges
+    try:
+        score_float = float(score)
+        fps_float = float(fps)
+
+        if not (0 <= score_float <= 10):
+            return jsonify({"status": "error", "message": "Score must be between 0 and 10."}), 400
+        
+        if not (10 <= fps_float <= 40):
+            return jsonify({"status": "error", "message": "FPS must be between 10 and 40."}), 400
+
+    except ValueError:
+        return jsonify({"status": "error", "message": "Invalid score or fps value."}), 400
+
+    # Prepare data for database insertion
     data = {
         "mill": mill_name,
         "machine": machine_name,
@@ -75,11 +89,8 @@ def handle_form_submission():
         "fileUpload": file_upload,
         "folderpath": folder_path
     }
-    # print(data)
-    print(data)
-    path = data['fileUpload']
-    fps = data['fps']
-    score = data['score']
+
+    # Insert data into database
     db.insert_validation_log(data)
     # Assuming file needs to be saved
     if file_upload:
@@ -96,7 +107,7 @@ def handle_form_submission():
         print(f"File {filename} uploaded successfully.")
     
     # Return a response
-    return jsonify({"status": "success", "message": "Data inserted successfully"})
+    return render_template('homepage.html')
     
 
 if __name__ == '__main__':
