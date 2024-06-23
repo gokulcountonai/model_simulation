@@ -56,8 +56,8 @@ $(document).ready(function() {
         var fps = $('#fps').val();
 
         // Validate score
-        if (!(score >= 0 && score <= 10)) {
-            alert('Score must be between 0 and 10.');
+        if (!(score >= 0 && score <= 1)) {
+            alert('Score must be between 0 and 1.');
             event.preventDefault(); // Prevent form submission
             return;
         }
@@ -70,5 +70,6 @@ $(document).ready(function() {
         }
 
         // If validation passes, form will submit normally
+        
     });
 });

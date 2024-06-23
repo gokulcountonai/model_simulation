@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from src.db import ProcessDB
 from main import ImageProcessor
-import os
-import os
+import os,time
 
 db = ProcessDB()
 image_processor = ImageProcessor()
@@ -10,8 +9,8 @@ image_processor = ImageProcessor()
 app = Flask(__name__)
 
 def run_validation(path,fps,score):
-
-    image_processor.score = score
+    image_processor.path = path
+    image_processor.score = float(score)
     return image_processor.read_images(path,fps)
 
 def preprocess_data(data):
@@ -64,13 +63,24 @@ def handle_form_submission():
     fps = request.form.get('fps')
     report = request.form.get('report')
 
+    print("Mill Name",mill_name)
+    print("Machine Name",machine_name)
+    print("Simulation Type",simulation_type)
+    print("Folder Path",folder_path)
+    print("File Upload",file_upload)
+    print("Score",score)
+    print("FPS",fps)
+    print("Report",report)
+
     # Validate score and fps ranges
     try:
+        print("Score",score)
+        print("FPS",fps)
         score_float = float(score)
         fps_float = float(fps)
 
-        if not (0 <= score_float <= 10):
-            return jsonify({"status": "error", "message": "Score must be between 0 and 10."}), 400
+        if not (0 <= score_float <= 1.0):
+            return jsonify({"status": "error", "message": "Score must be between 0 and 1."}), 400
         
         if not (10 <= fps_float <= 40):
             return jsonify({"status": "error", "message": "FPS must be between 10 and 40."}), 400
@@ -96,21 +106,22 @@ def handle_form_submission():
     if file_upload:
         filename = "reg"
 
-        # Delete all files in the directory
-        file_list = os.listdir("./uploads")
-        for file_name in file_list:
-            file_path = os.path.join("./uploads", file_name)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+        # # Delete all files in the directory
+        # file_list = os.listdir("./uploads")
+        # for file_name in file_list:
+        #     file_path = os.path.join("./uploads", file_name)
+        #     if os.path.isfile(file_path):
+        #         os.remove(file_path)
 
         file_upload.save(f"./uploads/{filename}")
         print(f"File {filename} uploaded successfully.")
 
-        with open(file_path, 'w') as f:
-            f.write("0")
-
+        with open('simulation/simulation.txt', 'w') as f:
+            f.write("1")
+        time.sleep(5)
         # Run validation
         run_validation(folder_path, fps, score)
+        
     
     # Return a response
     return render_template('homepage.html')

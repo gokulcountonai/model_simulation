@@ -51,7 +51,7 @@ class ProcessDB:
     def insert_validation_log(self, data):
         query = f"""
         INSERT INTO public.validation_log(validation_id, mill_name, machine_name, simulation_type, score, fps, report_availability, folder_path, "timestamp")
-        VALUES ('{data['mill']}', '{data['machine']}', {data['simulation_type']}, {data['score']}, {data['fps']}, {data['report_availability']}, {data['folderpath']}, {datetime.datetime.now()})
+        VALUES ('{(data['mill'])}', '{str(data['machine'])}', {str(data['simulation_type'])}, {str(data['score'])}, {str(data['fps'])}, {str(data['report_availability'])}, {str(data['folderpath'])}, {datetime.datetime.now()})
         """
         return self.db.insert(query)
 

@@ -11,6 +11,7 @@ class ImageProcessor:
         self.storeimages = StoreImage()
         self.inference = Inference()
         self.score = 0.1
+        self.path = ""
         thread = threading.Thread(target=self.get_infer_result)
         thread.start()
 
@@ -19,7 +20,7 @@ class ImageProcessor:
             filesList = os.listdir(path)
             for file in filesList:
                 image = cv2.imread(path + file)
-                self.inference.inferImage(image, str(camtype) + str(file))
+                self.inference.inferImage(image, str(camtype)+"_" + str(file))
                 time.sleep(1 / int(fps))
                 print("Infering image:", file)
             print("ALL IMAGES READ")
@@ -28,11 +29,12 @@ class ImageProcessor:
             print("Error in reading images:", e)
             return False
 
-    def get_infer_result(self,path="/home/kniti/projects/knit-i/knitting-core/src/output"):
+    def get_infer_result(self):
         while True:
             ret, data = self.inference.getInferResult()
             # print(data)
             if ret != False:
+                print(data)
                 if data["classType"] == "None":
                     continue
 
@@ -41,8 +43,8 @@ class ImageProcessor:
                 xyxy = [n for n in ast.literal_eval(data["xyxy"])]
                 imageId = data["imageId"]
 
-                print(path + "/" + imageId[2:])
-                img = cv2.imread(path + imageId[2:])
+                print(self.path + "/" + imageId[2:])
+                img = cv2.imread(self.path + imageId[2:])
                 unbox = img.copy()
 
                 for i, cls in enumerate(classType):
@@ -65,7 +67,8 @@ class ImageProcessor:
                         cv2.putText(img, cls, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
                         cv2.putText(img, str(conf[i]), (x1, y1 - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-                        jsonlocation = "/home/kniti/projects/knit-i/knitting-core/src/output/json/" + cls + "/"
+                        jsonlocation = str(self.path) + cls + "/"
+                        print(jsonlocation)
                         os.makedirs(jsonlocation, exist_ok=True)
                         print(imageId)
                         self.storeimages.setLabel(
