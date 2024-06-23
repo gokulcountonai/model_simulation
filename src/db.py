@@ -67,3 +67,11 @@ class ProcessDB:
             machine_names = [row['machine_name'] for row in machine_details_result]
             print(machine_names)
             return machine_names
+    
+
+    def add_machine(self, data):
+        query = f"""
+        INSERT INTO public.machine_details(machine_name, mill_id)
+        VALUES ('{data['machine_name']}', '{data['mill_id']}')
+        """
+        return self.db.insert(query)

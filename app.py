@@ -50,6 +50,28 @@ def get_mill_details():
     mill_details = db.fetch_mill_details()
     return jsonify(mill_details)
 
+@app.route('/add-machine', methods=['POST'])
+def add_machine():
+    data = request.json
+    print(data)
+    mill_name = data.get('mill_name')
+    machine_name = data.get('machine_name')
+    if not mill_name or not machine_name:
+        return jsonify({"status": "error", "message": "Please provide both mill name and machine name."}), 400
+
+    # Fetch mill_id for the given mill_name
+    mill_id = db.fetch_mill_details_by_millname(str(mill_name))
+    if not mill_id:
+        return jsonify({"status": "error", "message": "Mill name not found.Please ADD the mill first."}), 400
+
+    # Insert machine details
+    data = {
+        "machine_name": machine_name,
+        "mill_id": mill_id["mill_id"]
+    }
+    db.add_machine(data)
+
+    return jsonify({"status": "success", "message": "Machine added successfully."})
 
 @app.route('/submit-form', methods=['POST'])
 def handle_form_submission():
