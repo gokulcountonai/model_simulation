@@ -142,6 +142,12 @@ def handle_form_submission():
         with open('simulation/simulation.txt', 'w') as f:
             f.write("1")
         time.sleep(5)
+        while True:
+            with open('simulation/simulation.txt', 'r') as f:
+                content = f.read()
+                if content == "0":
+                    break
+                time.sleep(1)
         # Run validation
         run_validation(folder_path, fps, score)
         
