@@ -47,6 +47,12 @@ class ProcessDB:
         rows = self.db.select(query)
         return rows
     
+    def fetch_all_machines(self):
+        query = "SELECT mill_name, machine_name FROM mill_details JOIN machine_details ON mill_details.mill_id = machine_details.mill_id"
+        rows = self.db.select(query)
+        print(rows)
+        return rows
+    
 
     def insert_validation_log(self, data):
         query = f"""
@@ -75,3 +81,7 @@ class ProcessDB:
         VALUES ('{data['machine_name']}', '{data['mill_id']}')
         """
         return self.db.insert(query)
+
+
+db = ProcessDB()
+db.fetch_all_machines()

@@ -13,15 +13,6 @@ def run_validation(path,fps,score):
     image_processor.score = float(score)
     return image_processor.read_images(path,fps)
 
-def preprocess_data(data):
-    for key in ['tp', 'fp', 'fda', 'report_availability']:
-        if data.get(key) in [None, '', 'no']:
-            data[key] = 2
-        else:
-            data[key] = 1
-    return data
-
-
 @app.route('/')
 def index():
     return render_template('homepage.html')
@@ -72,6 +63,16 @@ def add_machine():
     db.add_machine(data)
 
     return jsonify({"status": "success", "message": "Machine added successfully."})
+
+
+@app.route('/machines_details', methods=['GET'])
+def machines_details():
+    return render_template('machines.html')
+
+@app.route('/view-machines', methods=['GET'])
+def view_machines():
+    return jsonify(db.fetch_machine_details())
+
 
 @app.route('/submit-form', methods=['POST'])
 def handle_form_submission():
@@ -149,5 +150,6 @@ def handle_form_submission():
     return render_template('homepage.html')
     
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=50211)
+    app.run(host='0.0.0.0', port=5010)
