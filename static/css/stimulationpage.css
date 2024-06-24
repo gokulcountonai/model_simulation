@@ -213,27 +213,6 @@ button[type="submit"]:hover {
     transition: background-color 0.3s ease;
     display: inline-block; /* Inline block for side-by-side alignment */
     margin-left: 10px; /* Space between buttons */
-    position: absolute; /* Absolute positioning */
-    top: 20px; /* Position near the top */
-    right: 20px; /* Adjusted position from the right edge */
-}
-
-.add-button:hover {
-    background-color: #0056b3;
-}
-
-/* Styles for Add Mill and Machine Details Buttons */
-.add-button {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 16px; /* Smaller padding */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px; /* Smaller font size */
-    transition: background-color 0.3s ease;
-    display: inline-block; /* Inline block for side-by-side alignment */
-    margin-left: 10px; /* Space between buttons */
     position: fixed; /* Fixed positioning */
     top: 20px; /* Position near the top */
     right: 10px; /* Position near the right edge */
@@ -260,6 +239,7 @@ button[type="submit"]:hover {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    display: flex; /* Enable flexbox for centering */
 }
 
 .modal-content {
@@ -269,10 +249,20 @@ button[type="submit"]:hover {
     width: 80%;
     max-width: 500px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transform: translate(-50%, -50%);
-    position: fixed;
-    top: 50%;
-    left: 50%; /* Adjusted to move the modal more towards the left */
+    position: relative; /* Adjusted for positioning close button */
+}
+
+.modal-content .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.modal-content .close-modal:hover {
+    color: #000;
 }
 
 .modal-content form {
