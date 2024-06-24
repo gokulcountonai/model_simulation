@@ -72,9 +72,9 @@ $(document).ready(function() {
     function submitForm() {
         $('#loader').show();
         toggleBlur(true);
-
+    
         var formData = new FormData($('#stimulationForm')[0]);
-
+    
         $.ajax({
             url: '/submit-form',
             type: 'POST',
@@ -82,19 +82,21 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success: function(data) {
-                $('#loader').hide();
-                toggleBlur(false);
+                $('#loader').hide(); // Hide loader
+                toggleBlur(false); // Remove blur effect
                 if (data.status === 'success') {
+                    // Show a completion message with an alert
                     alert('The process is complete.');
-                    window.location.href = data.report === 'yes' ? '/report' : '/';
+                    // After clicking "OK", check the report value for redirection
+                    if (data.report === 'yes') {
+                        window.location.href = '/';
+                    } else {
+                        window.location.href = '/';
+                    }
                 } else {
-                    alert(data.message);
+                    // If not successful, show the error message from the response
+                    alert(data.message); // Show error message
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                $('#loader').hide();
-                toggleBlur(false);
-                alert('An error occurred while submitting the form.');
             }
         });
     }
