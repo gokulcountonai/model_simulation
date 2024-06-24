@@ -89,6 +89,7 @@ def handle_form_submission():
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder)
 
+
         file_upload.save(os.path.join(upload_folder, filename))
         
         # Simulating validation process (write to simulation.txt)
@@ -100,6 +101,7 @@ def handle_form_submission():
             with open('simulation/simulation.txt', 'r') as f:
                 content = f.read()
                 if content == "0":
+                    os.system("rm -rf output/*")
                     break
                 time.sleep(1)
 

@@ -101,16 +101,16 @@ class Label:
         return True
     
 
-if __name__ == "__main__":
-    label = Label()
-    shape = Shape()
-    shape.add_label('test')
-    shape.add_points([[1,2],[3,4]])
-    shape.add_shape_type('rectangle')
-    label.add_shapes(shape)
-    label.add_imagePath('test.jpg')
-    label.setImage(cv2.imread('test.jpg'))
-    label.saveLabel('test.json')
+# if __name__ == "__main__":
+#     label = Label()
+#     shape = Shape()
+#     shape.add_label('test')
+#     shape.add_points([[1,2],[3,4]])
+#     shape.add_shape_type('rectangle')
+#     label.add_shapes(shape)
+#     label.add_imagePath('test.jpg')
+#     label.setImage(cv2.imread('test.jpg'))
+#     label.saveLabel('test.json')
 
 
 

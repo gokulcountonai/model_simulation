@@ -40,13 +40,6 @@ class StoreImage:
         return True
 
     def setLabel(self,image,result,coordinates,location,exposure,gain):  
-        # self.shape.add_label(result)
-        # self.shape.add_coordinates(coordinates)
-        # self.shape.add_shape_type('rectangle')
-        # self.label.add_shapes(self.shape)
-        # self.label.add_imagePath(location)
-        # self.label.setImage(image)
-        # self.saveLabel(location)
         #create a callback to save the label
         self.label = Label()
         self.shape = Shape()

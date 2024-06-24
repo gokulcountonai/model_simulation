@@ -67,7 +67,7 @@ class ImageProcessor:
                         cv2.putText(img, cls, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
                         cv2.putText(img, str(conf[i]), (x1, y1 - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-                        jsonlocation = str(self.path) + cls + "/"
+                        jsonlocation = "output/" + cls + "/"
                         print(jsonlocation)
                         os.makedirs(jsonlocation, exist_ok=True)
                         print(imageId)
