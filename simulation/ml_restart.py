@@ -1,7 +1,7 @@
 import os
 import time
 
-FILE_PATH = 'simulation.txt'
+FILE_PATH = '/home/kniti/projects/knit-i/simulation/simulation.txt'
 CONTAINER_NAME = 'knitting-ml'
 
 def read_file_content(file_path):
@@ -13,15 +13,22 @@ def restart_container(container_name):
     exit_code = os.system(command)
     if exit_code == 0:
         print(f"Container '{container_name}' restarted successfully.")
+        return True
     else:
         print(f"Failed to restart container '{container_name}'. Exit code: {exit_code}")
+        return False
 
 if __name__ == "__main__":
     while True:
         try:
             content = read_file_content(FILE_PATH)
+            print(content)
             if content == '1':
-                restart_container(CONTAINER_NAME)
+                if restart_container(CONTAINER_NAME):
+                    with open(FILE_PATH, 'w') as f:
+                        f.write('0')
+                        print("Successfully restarted container. Wrote '0' to file.")
+
             elif content == '0':
                 print("File contains '0'. No action taken.")
             else:
