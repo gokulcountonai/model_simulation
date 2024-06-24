@@ -1,20 +1,10 @@
 $(document).ready(function() {
-    // Fetch machines and mills data on page load
-    $.ajax({
-        url: '/machines',
-        method: 'GET',
-        success: function(data) {
-            const machineSelect = $('#machine');
-            machineSelect.html('<option value="" disabled selected>Select machine</option>');
-            data.forEach(function(machine) {
-                machineSelect.append(`<option value="${machine.machine_id}">${machine.machine_name}</option>`);
-            });
-        },
-        error: function(error) {
-            console.error('Error fetching machine details:', error);
-        }
-    });
+    // Function to toggle blur effect on the content area
+    function toggleBlur(blur) {
+        $('.elements').toggleClass('blurred', blur);
+    }
 
+    // Fetch mills data on page load
     $.ajax({
         url: '/mills',
         method: 'GET',
@@ -34,13 +24,12 @@ $(document).ready(function() {
     $('#mill').change(function() {
         const selectedMillId = $(this).val(); // Get selected mill ID
         $.ajax({
-            url: `/machines_by_mill/${selectedMillId}`, // Assuming this endpoint exists
+            url: `/machines_by_mill/${selectedMillId}`,
             method: 'GET',
             success: function(data) {
                 const machineSelect = $('#machine');
-                machineSelect.html('<option value="" disabled selected>Select machine</option>'); // Clear and add placeholder
+                machineSelect.html('<option value="" disabled selected>Select machine</option>');
                 data.forEach(function(machineName) {
-                    // Assuming machineName is a string like 'hisar 1', 'hisar 2'
                     machineSelect.append(`<option value="${machineName}">${machineName}</option>`);
                 });
             },
@@ -52,24 +41,65 @@ $(document).ready(function() {
 
     // Form submission handling
     $('#stimulationForm').submit(function(event) {
+        event.preventDefault(); // Prevent default form submission
+
         var score = $('#score').val();
         var fps = $('#fps').val();
 
         // Validate score
         if (!(score >= 0 && score <= 1)) {
             alert('Score must be between 0 and 1.');
-            event.preventDefault(); // Prevent form submission
             return;
         }
 
         // Validate fps
         if (!(fps >= 10 && fps <= 40)) {
             alert('FPS must be between 10 and 40.');
-            event.preventDefault(); // Prevent form submission
             return;
         }
 
-        // If validation passes, form will submit normally
-        
+        // If validation passes, continue with form submission
+        submitForm();
     });
+
+    // Function to handle form submission via AJAX
+    function submitForm() {
+        // Show loader and blur background
+        $('#loader').show();
+        toggleBlur(true);
+
+        var formData = new FormData($('#stimulationForm')[0]);
+
+        $.ajax({
+            url: '/submit-form',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                $('#loader').hide(); // Hide loader
+                toggleBlur(false); // Remove blur effect
+                if (data.status === 'success') {
+                    // Show a completion message with an alert
+                    alert('The process is complete.');
+                    // After clicking "OK", check the report value for redirection
+                    if (data.report === 'yes') {
+                        window.location.href = '/';
+                    } else {
+                        window.location.href = '/';
+                    }
+                } else {
+                    // If not successful, show the error message from the response
+                    alert(data.message); // Show error message
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $('#loader').hide(); // Hide loader
+                toggleBlur(false); // Remove blur effect
+                console.error('Error:', textStatus, errorThrown);
+                // Show a generic error message
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    }
 });

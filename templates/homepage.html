@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stimulation Software</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stimulationpage.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
                         </select>
                     </div>
                 </div>
-
+    
                 <div class="form-group">
                     <label>Type of validation:</label>
                     <div>
@@ -45,19 +45,19 @@
                         <input type="text" id="folderpath" name="folderpath" placeholder="Enter FolderPath">
                     </div>
                 </div>
-
+    
                 <!-- Added file upload field -->
                 <div class="form-group">
                     <label for="fileUpload">Upload File:</label>
                     <input type="file" id="fileUpload" name="fileUpload">
                 </div>
-
+    
                 <div class="form-group">
                     <div class="form-item">
                         <label for="score">Score:</label>
                         <input type="text" id="score" name="score" placeholder="Enter score">
                     </div>
-
+    
                     <div class="form-item">
                         <label for="fps">FPS:</label>
                         <input type="text" id="fps" name="fps" placeholder="Enter FPS">
@@ -71,9 +71,12 @@
                     </div>
                 </div>
                 <button type="submit">Submit</button>
+               
             </form>
         </div>
+        <div id="loader" class="loader" style="display: none;"></div> <!-- Ensure loader is here -->
     </div>
+    
     <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
-</body>
+    </body>
 </html>
