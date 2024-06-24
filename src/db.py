@@ -83,5 +83,15 @@ class ProcessDB:
         return self.db.insert(query)
 
 
+    def insert_millname(self,data):
+        query=f"""
+        Insert into public.mill_details (mill_name)
+        VALUES ('{data['name']}')
+        """
+        return self.db.insert(query)
+
+
+    
+
 db = ProcessDB()
 db.fetch_all_machines()

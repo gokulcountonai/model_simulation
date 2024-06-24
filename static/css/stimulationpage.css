@@ -159,41 +159,153 @@ button[type="submit"]:hover {
     }
     5%,
     95% {
-        box-shadow: 0 -0.83em 0 -0.4em, 
-        0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 
+        box-shadow: 0 -0.83em 0 -0.4em,
+        0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
         0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
     }
     10%,
     59% {
-        box-shadow: 0 -0.83em 0 -0.4em, 
-        -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, 
-        -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+        box-shadow: 0 -0.83em 0 -0.4em,
+        -0.087em -0.825em 0 -0.42em,
+        -0.173em -0.812em 0 -0.44em,
+        -0.256em -0.789em 0 -0.46em,
+        -0.297em -0.775em 0 -0.477em;
     }
     20% {
-        box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
-        -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, 
+        box-shadow: 0 -0.83em 0 -0.4em,
+        -0.338em -0.758em 0 -0.42em,
+        -0.555em -0.617em 0 -0.44em,
+        -0.671em -0.488em 0 -0.46em,
         -0.749em -0.34em 0 -0.477em;
     }
     38% {
-        box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
-        -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, 
+        box-shadow: 0 -0.83em 0 -0.4em,
+        -0.377em -0.74em 0 -0.42em,
+        -0.645em -0.522em 0 -0.44em,
+        -0.775em -0.297em 0 -0.46em,
         -0.82em -0.09em 0 -0.477em;
     }
     100% {
-        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 
-        0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+        box-shadow: 0 -0.83em 0 -0.4em,
+        0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+        0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
     }
 }
 
 @keyframes round {
-    0% { transform: rotate(0deg) }
-    100% { transform: rotate(360deg) }
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
-.blurred {
-    filter: blur(2px); /* Adjust the blur amount as needed */
+/* Styles for Add Mill and Machine Details Buttons */
+.add-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px; /* Smaller padding */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px; /* Smaller font size */
+    transition: background-color 0.3s ease;
+    display: inline-block; /* Inline block for side-by-side alignment */
+    margin-left: 10px; /* Space between buttons */
+    position: absolute; /* Absolute positioning */
+    top: 20px; /* Position near the top */
+    right: 20px; /* Adjusted position from the right edge */
 }
 
-.blurred .loader {
-    filter: none !important; /* Ensure the loader itself is not blurred */
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for Add Mill and Machine Details Buttons */
+.add-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px; /* Smaller padding */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px; /* Smaller font size */
+    transition: background-color 0.3s ease;
+    display: inline-block; /* Inline block for side-by-side alignment */
+    margin-left: 10px; /* Space between buttons */
+    position: fixed; /* Fixed positioning */
+    top: 20px; /* Position near the top */
+    right: 10px; /* Position near the right edge */
+    z-index: 1000; /* Ensure the buttons are above other content */
+}
+
+#addMachineButton {
+    right: 150px; /* Adjusted to ensure both buttons are visible */
+}
+
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for Modal */
+.modal-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+    position: fixed;
+    top: 50%;
+    left: 50%; /* Adjusted to move the modal more towards the left */
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.modal-content input[type="text"] {
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.modal-content button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px; /* Smaller padding */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Smaller font size */
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
 }

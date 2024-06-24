@@ -6,6 +6,7 @@
     <title>Stimulation Software</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stimulationpage.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 </head>
 <body>
     <div class="container">
@@ -71,12 +72,46 @@
                     </div>
                 </div>
                 <button type="submit">Submit</button>
-               
             </form>
         </div>
         <div id="loader" class="loader" style="display: none;"></div> <!-- Ensure loader is here -->
     </div>
+
+    <!-- Add Mill and Machine Details Buttons -->
+    <button class="add-button" id="addMachineButton">+ Add Machine Name</button>
+    <button class="add-button" id="addMillButton">+ Add Mill Name</button>
     
-    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
-    </body>
+
+    <!-- Modal for Add Mill Details -->
+    <div id="modalContainerMill" class="modal-container" style="display: none;">
+        <div class="modal-content">
+            <h3>Add Mill Name</h3>
+            <form id="addMillForm">
+                <div class="form-item">
+                    <label for="millName">Mill Name:</label>
+                    <input type="text" id="millName" name="millName" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal for Add Machine Details -->
+    <div id="modalContainerMachine" class="modal-container" style="display: none;">
+        <div class="modal-content">
+            <h3>Add Machine Name</h3>
+            <form id="addMachineForm">
+                <label for="machineMillName">Mill Name:</label>
+                <select id="machineMillName" name="machineMillName">
+                    <option value="" disabled selected>Select mill</option>
+                </select>
+                <div class="form-item">
+                    <label for="machineName">Machine Name:</label>
+                    <input type="text" id="machineName" name="machineName" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
 </html>
