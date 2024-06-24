@@ -13,10 +13,6 @@ def run_validation(path, fps, score):
     image_processor.score = float(score)
     return image_processor.read_images(path, fps)
 
-@app.route('/')
-def index():
-    return render_template('homepage.html')
-
 @app.route('/machines_by_mill/<mill_name>', methods=['GET'])
 def get_machines_by_mill(mill_name):
     if mill_name:
@@ -118,9 +114,9 @@ def add_mill():
     add_millname = db.insert_millname({"name": mill_name})
     return jsonify(add_millname)
 
-@app.route('/report', methods=['GET'])
-def report():
-    return render_template('report.html')
+@app.route('/')
+def index():
+    return render_template('homepage.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5030)
+    app.run(host='0.0.0.0', port=9999, debug=True)
