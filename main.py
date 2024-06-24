@@ -12,7 +12,7 @@ class ImageProcessor:
         self.inference = Inference()
         self.score = 0.1
         self.path = ""
-        thread = threading.Thread(target=self.get_infer_result)
+        thread = threading.Thread(target=self.get_infer_result())
         thread.start()
 
     def read_images(self, path, fps, camtype="1"):
