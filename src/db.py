@@ -6,7 +6,10 @@ class DatabaseAPI:
         """
         Initializes the DatabaseAPI class with the base URL.
         """
-        self.base_url = base_url
+        try:
+            self.base_url = base_url
+        except Exception as e:
+            print(f"Error initializing DatabaseAPI: {e}")
 
     def execute_query(self, query, function):
         """
@@ -42,7 +45,11 @@ class DatabaseAPI:
         Returns:
             dict: The JSON response from the API.
         """
-        return self.execute_query(query, "insert")
+        try:
+            return self.execute_query(query, "insert")
+        except Exception as e:
+            print(f"Error executing insert query: {e}")
+            return None
 
     def insert_by_id(self, query):
         """
@@ -54,8 +61,12 @@ class DatabaseAPI:
         Returns:
             dict: The JSON response from the API.
         """
-        return self.execute_query(query, "insertReturnId")
-    
+        try:
+            return self.execute_query(query, "insertReturnId")
+        except Exception as e:
+            print(f"Error executing insert query: {e}")
+            return None
+        
     def select(self, query):
         """
         Executes a select query.
@@ -66,7 +77,11 @@ class DatabaseAPI:
         Returns:
             dict: The JSON response from the API.
         """
-        return self.execute_query(query, "select")
+        try:
+            return self.execute_query(query, "select")
+        except Exception as e:
+            print(f"Error executing select query: {e}")
+            return None
     
     def update(self, query):
         """
@@ -78,8 +93,12 @@ class DatabaseAPI:
         Returns:
             dict: The JSON response from the API.
         """
-        return self.execute_query(query, "update")
-    
+        try:
+            return self.execute_query(query, "update")
+        except Exception as e:
+            print(f"Error executing update query: {e}")
+            return None
+        
     def delete(self, query):
         """
         Executes a delete query.
@@ -90,14 +109,21 @@ class DatabaseAPI:
         Returns:
             dict: The JSON response from the API.
         """
-        return self.execute_query(query, "delete")
-
+        try:
+            return self.execute_query(query, "delete")
+        except Exception as e:
+            print(f"Error executing delete query: {e}")
+            return None
+        
 class ProcessDB:
     def __init__(self):
         """
         Initializes the ProcessDB class and creates an instance of DatabaseAPI.
         """
-        self.db = DatabaseAPI("http://100.121.194.26:5431")
+        try:
+            self.db = DatabaseAPI("http://100.121.194.26:5431")
+        except Exception as e:
+            print(f"Error initializing ProcessDB: {e}")
 
     def fetch_mill_details(self):
         """
@@ -106,10 +132,14 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = "select * from mill_details"
-        rows = self.db.select(query)
-        return rows
-    
+        try:
+            query = "select * from mill_details"
+            rows = self.db.select(query)
+            return rows
+        except Exception as e:
+            print(f"Error fetching mill details: {e}")
+            return []
+        
     def fetch_mill_details_by_millname(self, mill_name):
         """
         Fetches mill details by mill name.
@@ -120,10 +150,14 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = f"select * from mill_details where mill_name = '{mill_name}'"
-        rows = self.db.select(query)
-        return rows[0]
-    
+        try:
+            query = f"select * from mill_details where mill_name = '{mill_name}'"
+            rows = self.db.select(query)
+            return rows[0]
+        except Exception as e:
+            print(f"Error fetching mill details by mill name: {e}")
+            return None
+        
     def fetch_machine_details(self, data):
         """
         Fetches machine details by mill ID.
@@ -134,9 +168,13 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = "select * from machine_details where mill_id = " + data
-        rows = self.db.select(query)
-        return rows
+        try:
+            query = "select * from machine_details where mill_id = " + data
+            rows = self.db.select(query)
+            return rows
+        except Exception as e:
+            print(f"Error fetching machine details: {e}")
+            return []
     
     def fetch_all_machines(self):
         """
@@ -145,9 +183,13 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = "SELECT mill_name, machine_name FROM mill_details JOIN machine_details ON mill_details.mill_id = machine_details.mill_id"
-        rows = self.db.select(query)
-        return rows
+        try:
+            query = "SELECT mill_name, machine_name FROM mill_details JOIN machine_details ON mill_details.mill_id = machine_details.mill_id"
+            rows = self.db.select(query)
+            return rows
+        except Exception as e:
+            print(f"Error fetching all machines: {e}")
+            return []
     
 
     def insert_validation_log(self, data):
@@ -160,11 +202,17 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = f"""
-        INSERT INTO public.validation_log(validation_id, mill_name, machine_name, simulation_type, score, fps, report_availability, folder_path, "timestamp")
-        VALUES ('{(data['mill'])}', '{str(data['machine'])}', {str(data['simulation_type'])}, {str(data['score'])}, {str(data['fps'])}, {str(data['report_availability'])}, {str(data['folderpath'])}, {datetime.datetime.now()})
-        """
-        return self.db.insert(query)
+        try:
+            print("---------Validation Log Data---------")
+            query = f"""
+            INSERT INTO public.validation_log(mill_name, machine_name, simulation_type, score, fps, report_availability, folder_path, "timestamp")
+            VALUES ('{(data['mill'])}', '{str(data['machine'])}', '{str(data['simulation_type'])}', '{str(data['score'])}', '{str(data['fps'])}', '{str(data['report_availability'])}', '{str(data['folderpath'])}', '{datetime.datetime.now()}')
+            """
+            print(query)
+            return self.db.insert(query)
+        except Exception as e:
+            print(f"Error inserting validation log: {e}")
+            return None
 
 
     def fetch_machine_details_by_mill_name(self, mill_name):
@@ -203,11 +251,15 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = f"""
-        INSERT INTO public.machine_details(machine_name, mill_id)
-        VALUES ('{data['machine_name']}', '{data['mill_id']}')
-        """
-        return self.db.insert(query)
+        try:
+            query = f"""
+            INSERT INTO public.machine_details(machine_name, mill_id)
+            VALUES ('{data['machine_name']}', '{data['mill_id']}')
+            """
+            return self.db.insert(query)
+        except Exception as e:
+            print(f"Error adding machine: {e}")
+            return None
 
 
     def insert_millname(self, data):
@@ -220,8 +272,13 @@ class ProcessDB:
         Returns:
             dict: The JSON response from the API.
         """
-        query = f"""
-        Insert into public.mill_details (mill_name)
-        VALUES ('{data['name']}')
-        """
-        return self.db.insert(query)
+        try:
+            query = f"""
+            Insert into public.mill_details (mill_name)
+            VALUES ('{data['name']}')
+            """
+            return self.db.insert(query)
+
+        except Exception as e:
+            print(f"Error inserting mill name: {e}")
+            return None
