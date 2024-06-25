@@ -39,7 +39,7 @@ def get_mill_details():
 
 @app.route('/add-machine', methods=['POST'])
 def add_machine():
-    try
+    try:
         data = request.json
         mill_name = data.get('mill_name')
         machine_name = data.get('machine_name')
