@@ -8,8 +8,9 @@ image_processor = ImageProcessor()
 
 app = Flask(__name__)
 
-def run_validation(path, fps, score):
+def run_validation(path, fps, score,batch_id):
     try:
+        image_processor.batch_id = batch_id
         image_processor.path = path
         image_processor.score = float(score)
         return image_processor.read_images(path, fps)
@@ -97,7 +98,7 @@ def handle_form_submission():
             "folderpath": folder_path
         }
 
-        db.insert_validation_log(data)
+        batch_id = db.insert_validation_log(data)
 
         if file_upload:
             filename = "reg"
@@ -122,7 +123,7 @@ def handle_form_submission():
                         break
                     time.sleep(1)
 
-            run_validation(folder_path, fps, score)
+            run_validation(folder_path, fps, score,batch_id)
 
         return jsonify({"status": "success", "message": "Validation started successfully", "report": report})
     except Exception as e:

@@ -5,6 +5,9 @@ import ast
 import cv2,threading
 from src.infer import Inference
 from src.storeimages import StoreImage
+from src.db import ProcessDB
+
+db = ProcessDB()
 
 class ImageProcessor:
     def __init__(self):
@@ -12,6 +15,7 @@ class ImageProcessor:
             self.storeimages = StoreImage()
             self.inference = Inference()
             self.score = 0.1
+            self.batch_id = ""
             self.path = ""
             thread = threading.Thread(target=self.get_infer_result)
             thread.start()
@@ -36,16 +40,18 @@ class ImageProcessor:
         while True:
             try:
                 ret, data = self.inference.getInferResult()
-                # print(data)
                 if ret != False:
-                    print(data)
+                    # print(data)
+                    data['batch_id'] = self.batch_id
                     if data["classType"] == "None":
+                        print(data)         
                         continue
 
                     classType = [n.strip() for n in ast.literal_eval(data["classType"])]
                     conf = [n for n in ast.literal_eval(data["conf"])]
                     xyxy = [n for n in ast.literal_eval(data["xyxy"])]
                     imageId = data["imageId"]
+                    print(data)  
 
                     print(self.path + "/" + imageId[2:])
                     img = cv2.imread(self.path + imageId[2:])
@@ -72,7 +78,6 @@ class ImageProcessor:
                             cv2.putText(img, str(conf[i]), (x1, y1 - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
                             jsonlocation = "output/" + cls + "/"
-                            print(jsonlocation)
                             os.makedirs(jsonlocation, exist_ok=True)
                             print(imageId)
                             self.storeimages.setLabel(

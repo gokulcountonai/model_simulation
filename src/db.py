@@ -209,10 +209,10 @@ class ProcessDB:
             VALUES ('{(data['mill'])}', '{str(data['machine'])}', '{str(data['simulation_type'])}', '{str(data['score'])}', '{str(data['fps'])}', '{str(data['report_availability'])}', '{str(data['folderpath'])}', '{datetime.datetime.now()}')
             """
             print(query)
-            return self.db.insert(query)
+            return self.db.insert_by_id(query)
         except Exception as e:
             print(f"Error inserting validation log: {e}")
-            return None
+            return ""
 
 
     def fetch_machine_details_by_mill_name(self, mill_name):
@@ -282,3 +282,14 @@ class ProcessDB:
         except Exception as e:
             print(f"Error inserting mill name: {e}")
             return None
+        
+
+    def inference_logging(self):
+        try:
+            query="""
+            IINSERT INTO public.inference_logging ()
+            VALUES ()
+            """
+        except Exception as e:
+            print(str(e))
+
