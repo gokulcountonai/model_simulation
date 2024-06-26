@@ -11,7 +11,7 @@ $(document).ready(function() {
             method: 'GET',
             success: function(data) {
                 const millSelect = $('#mill');
-                const machineMillSelect = $('#machineMillName'); // Added for machine modal
+                const machineMillSelect = $('#machineMillName');
                 millSelect.html('<option value="" disabled selected>Select mill</option>');
                 machineMillSelect.html('<option value="" disabled selected>Select mill</option>');
 
@@ -85,18 +85,21 @@ $(document).ready(function() {
                 $('#loader').hide(); // Hide loader
                 toggleBlur(false); // Remove blur effect
                 if (data.status === 'success') {
-                    // Show a completion message with an alert
                     alert('The process is complete.');
-                    // After clicking "OK", check the report value for redirection
                     if (data.report === 'yes') {
                         window.location.href = '/';
                     } else {
                         window.location.href = '/';
                     }
                 } else {
-                    // If not successful, show the error message from the response
                     alert(data.message); // Show error message
                 }
+            },
+            error: function(error) {
+                $('#loader').hide(); // Hide loader on error
+                toggleBlur(false); // Remove blur effect on error
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form. Please try again.');
             }
         });
     }
@@ -109,6 +112,18 @@ $(document).ready(function() {
     // Show modal for adding machine
     $('#addMachineButton').click(function() {
         $('#modalContainerMachine').show();
+    });
+
+    // Close modals when clicking the close button (x)
+    $('.close').click(function() {
+        $(this).closest('.modal-container').hide();
+    });
+
+    // Close modals when clicking outside the modal content
+    $(window).click(function(event) {
+        if ($(event.target).hasClass('modal-container')) {
+            $(event.target).hide();
+        }
     });
 
     // Submit event handler for adding mill form
@@ -126,6 +141,7 @@ $(document).ready(function() {
             },
             error: function(error) {
                 console.error('Error adding mill:', error);
+                alert('An error occurred while adding the mill. Please try again.');
             }
         });
     });
@@ -133,7 +149,7 @@ $(document).ready(function() {
     // Submit event handler for adding machine form
     $('#addMachineForm').submit(function(e) {
         e.preventDefault();
-        var machineMillName = $('#machineMillName').val(); // Corrected to #machineMillName
+        var machineMillName = $('#machineMillName').val();
         var machineName = $('#machineName').val();
         $.ajax({
             url: '/add-machine',
@@ -142,10 +158,11 @@ $(document).ready(function() {
             data: JSON.stringify({ mill_name: machineMillName, machine_name: machineName }),
             success: function(response) {
                 $('#modalContainerMachine').hide();
-                location.reload(); // Reload the page or update UI as needed
+                location.reload();
             },
             error: function(error) {
                 console.error('Error adding machine:', error);
+                alert('An error occurred while adding the machine. Please try again.');
             }
         });
     });
